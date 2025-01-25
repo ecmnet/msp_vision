@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>msp_vision</name>
+  <version>0.0.1</version>
+  <description>A ROS2 node for vision processing</description>
+  <maintainer email="ecm@gmx.de">ecm</maintainer>
+  <license>TODO: License declaration</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <build_depend>libavformat-dev</build_depend>
+<build_depend>libavcodec-dev</build_depend>
+<build_depend>libavutil-dev</build_depend>
+
+<exec_depend>libavformat-dev</exec_depend>
+<exec_depend>libavcodec-dev</exec_depend>
+<exec_depend>libavutil-dev</exec_depend>
+<build_depend>libswscale-dev</build_depend>
+<exec_depend>libswscale-dev</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
