@@ -65,7 +65,8 @@ GstRTSPServer *msp::MSPVisionNode::rtsp_server_create(const std::string &port, c
   }
   gst_rtsp_server_attach(server, NULL);
   /* add a timeout for the session cleanup */
-  g_timeout_add_seconds(1, (GSourceFunc)session_cleanup, this);
+  g_timeout_add(500, (GSourceFunc)session_cleanup, this);
+
   return server;
 }
 
@@ -84,6 +85,7 @@ void msp::MSPVisionNode::rtsp_server_add_url(const char *url, const char *sPipel
    * element with pay%d names will be a stream */
   factory = gst_rtsp_media_factory_new();
   gst_rtsp_media_factory_set_launch(factory, sPipeline);
+  g_object_set_data(G_OBJECT(factory), "msp_vision", this);
 
   /* notify when our media is ready, This is called whenever someone asks for
    * the media and a new pipeline is created */
@@ -98,10 +100,25 @@ void msp::MSPVisionNode::rtsp_server_add_url(const char *url, const char *sPipel
   g_object_unref(mounts);
 }
 
+static void msp::media_teardown(GstRTSPMedia *media, gpointer user_data)
+{
+  msp::MSPVisionNode *node = (msp::MSPVisionNode *)user_data;
+  node->onStreamingStopped();
+  // Perform cleanup tasks
+  GstElement *pipeline = gst_rtsp_media_get_element(media);
+  gst_element_set_state(pipeline, GST_STATE_NULL);
+  gst_object_unref(pipeline);
+}
+
 static void msp::media_configure(GstRTSPMediaFactory *factory, GstRTSPMedia *media, GstElement **appsrc)
 {
+  g_signal_connect(media, "unprepared", (GCallback)media_teardown, g_object_get_data(G_OBJECT(factory), "msp_vision"));
+  msp::MSPVisionNode *node = (msp::MSPVisionNode *)g_object_get_data(G_OBJECT(factory), "msp_vision");
+  node->onStreamingStarted();
+
   if (appsrc)
   {
+
     GstElement *pipeline = gst_rtsp_media_get_element(media);
 
     *appsrc = gst_bin_get_by_name(GST_BIN(pipeline), "imagesrc");

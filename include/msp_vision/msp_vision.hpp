@@ -58,6 +58,8 @@ public:
   }
 
   void start();
+  void onStreamingStarted();
+  void onStreamingStopped();
 
   void receive_msp_command(const std::shared_ptr<px4_msgs::srv::VehicleCommand::Request> request,
 						   std::shared_ptr<px4_msgs::srv::VehicleCommand::Response> response) override;
@@ -82,8 +84,9 @@ private:
   std::string pipeline_head;
   std::string pipeline_tail;
 
-  bool local_only = false;
-  bool camera     = false;
+  bool local_only   = false;
+  bool camera       = false;
+  bool is_streaming = true;
 
   uint64_t armed_time  = 0;
   float    voltage_v   = 0;
@@ -106,6 +109,7 @@ private:
   void rtsp_server_add_url(const char* url, const char* sPipeline, GstElement** appsrc);
   void onImageReceived(const gz::msgs::Image& msg);
   void onDepthReceived(const gz::msgs::Image& msg);
+
   GstRTSPServer* rtsp_server_create(const std::string& port, const bool local_only);
   GstCaps* gst_caps_new_from_image(const cv::Mat image);
   void push_mat_to_gst(const cv::Mat image);
@@ -114,6 +118,7 @@ private:
 };
 
 static void media_configure(GstRTSPMediaFactory *factory, GstRTSPMedia *media, GstElement **appsrc);
+static void media_teardown(GstRTSPMedia *media, gpointer user_data); 
 static void *mainloop(void *arg);
 static gboolean session_cleanup(MSPVisionNode *node, rclcpp::Logger logger, gboolean ignored);
 
