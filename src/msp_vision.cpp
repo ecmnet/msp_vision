@@ -11,7 +11,7 @@
 
 using namespace msp;
 
-void MSPVisionNode::start()
+void MSPVisionNode::initialize()
 {
   
   setup_pipeline();

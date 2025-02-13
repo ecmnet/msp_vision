@@ -46,7 +46,7 @@ public:
        armed_time =  msg->armed_time;
 		});
 
-    start();
+    initialize();
 
   }
 
@@ -57,7 +57,7 @@ public:
     g_object_unref(pool);
   }
 
-  void start();
+  void initialize();
   void onStreamingStarted();
   void onStreamingStopped();
 
