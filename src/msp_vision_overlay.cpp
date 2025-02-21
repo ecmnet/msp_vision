@@ -4,6 +4,8 @@
 #include <opencv2/freetype.hpp>
 #include <sstream>
 
+#define MESSAGE_VISIBLE_US 3000000
+
 using namespace msp;
 
 void MSPVisionNode::setup_fonts()
@@ -38,9 +40,9 @@ void MSPVisionNode::process_video_overlay(cv::Mat &image)
         addOverlayItem(roiImage, "00:00.0", "disarmed", 0);
 
     addOverlayItem(roiImage, msp::Formatter::formatDecimals(voltage_v, 1, "V"), "battery", 150);
-    addOverlayItem(roiImage, msp::Formatter::formatDecimals(altrel_m, 1, "m"), "alt.rel", 270);
+    addOverlayItem(roiImage, msp::Formatter::formatDecimals(altrel_m, 1, "m"), "altitude", 270);
     
-    if (log_message_s.tms > this->get_clock()->now().nanoseconds() / 1000L - 3000000)
+    if (log_message_s.tms > this->get_clock()->now().nanoseconds() / 1000L - MESSAGE_VISIBLE_US)
         addOverlayItem(roiImage, log_message_s.text, "info", 390);
     else
         addOverlayItem(roiImage, "", "info", 390);
