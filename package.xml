@@ -7,20 +7,22 @@
   <maintainer email="ecm@gmx.de">ecm</maintainer>
   <license>TODO: License declaration</license>
 
+    <depend>msp_controller</depend>
+
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
   <build_depend>libavformat-dev</build_depend>
-<build_depend>libavcodec-dev</build_depend>
-<build_depend>libavutil-dev</build_depend>
+  <build_depend>libavcodec-dev</build_depend>
+  <build_depend>libavutil-dev</build_depend>
 
-<exec_depend>libavformat-dev</exec_depend>
-<exec_depend>libavcodec-dev</exec_depend>
-<exec_depend>libavutil-dev</exec_depend>
-<build_depend>libswscale-dev</build_depend>
-<exec_depend>libswscale-dev</exec_depend>
+  <exec_depend>libavformat-dev</exec_depend>
+  <exec_depend>libavcodec-dev</exec_depend>
+  <exec_depend>libavutil-dev</exec_depend>
+  <build_depend>libswscale-dev</build_depend>
+  <exec_depend>libswscale-dev</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

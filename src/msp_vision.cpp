@@ -4,8 +4,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/freetype.hpp>
 #include <rclcpp/rclcpp.hpp>
-#include <px4_msgs/msg/vehicle_status.hpp>
-#include <px4_msgs/msg/battery_status.hpp>
+#include <string>
 
 #define MAX_DEPTH_M 20.0;
 

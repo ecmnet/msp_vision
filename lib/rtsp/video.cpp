@@ -24,7 +24,7 @@ void msp::MSPVisionNode::setup_pipeline()
         "( appsrc name=imagesrc do-timestamp=true min-latency=0 max-latency=0 max-bytes=1000 is-live=true ! "
         "videoconvert ! videoscale ! ";
     pipeline =
-        pipeline_head + caps_1 + framerate + caps_2 + " ! x264enc tune=zerolatency bitrate=" + bitrate + pipeline_tail;
+        pipeline_head + caps_1 + framerate + caps_2 + " ! x264enc tune=zerolatency speed-preset=fast bitrate=" + bitrate + pipeline_tail;
     rtsp_server_add_url(mountpoint.c_str(), pipeline.c_str(), (GstElement **)&(appsrc));
   }
   else
