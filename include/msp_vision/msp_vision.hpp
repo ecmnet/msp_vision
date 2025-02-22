@@ -46,15 +46,23 @@ namespace msp
           "msp/out/vehicle_local_position", qos, [this](const px4_msgs::msg::VehicleLocalPosition::UniquePtr msg)
           { altrel_m = msg->dist_bottom; });
 
-      message_subscription_ = this->create_subscription<px4_msgs::msg::LogMessage>(
+      message_px4_subscription_ = this->create_subscription<px4_msgs::msg::LogMessage>(
           "msp/out/log_message", qos, [this](const px4_msgs::msg::LogMessage::UniquePtr msg)
           { 
             log_message_s.text = std::string(reinterpret_cast<const char*>(msg->text.data()));
             log_message_s.severity = msg->severity; 
-            log_message_s.tms = msg->timestamp;
+            log_message_s.tms = this->get_clock()->now().nanoseconds() / 1000L;
             
          });
 
+      message_msp_subscription_ = this->create_subscription<px4_msgs::msg::LogMessage>(
+          "/msp/in/log_message", qos, [this](const px4_msgs::msg::LogMessage::UniquePtr msg)
+          {
+            log_message_s.text = std::string(reinterpret_cast<const char*>(msg->text.data()));
+            log_message_s.severity = msg->severity; 
+            log_message_s.tms = this->get_clock()->now().nanoseconds() / 1000L;
+           });
+     
       initialize();
     }
 
@@ -85,7 +93,8 @@ namespace msp
 
     rclcpp::Subscription<px4_msgs::msg::BatteryStatus>::SharedPtr battery_subscription_;
     rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr local_pos_subscription_;
-    rclcpp::Subscription<px4_msgs::msg::LogMessage>::SharedPtr message_subscription_;
+    rclcpp::Subscription<px4_msgs::msg::LogMessage>::SharedPtr message_px4_subscription_;
+    rclcpp::Subscription<px4_msgs::msg::LogMessage>::SharedPtr message_msp_subscription_;
 
     std::unique_ptr<gz::transport::Node> gz_node;
 
